@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="QR Code Result Page" />
+  <title>QR Code Result</title>
+  <link rel="stylesheet" href="https://cdn.tailwindcss.com">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f9f9f9;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      text-align: center;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .qr-code {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+    }
+    .custom-design {
+      border: none;
+      border-radius: 12px;
+      padding: 20px;
+      background: #f0f4f8;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+    }
+    #url-text {
+      color: #555;
+    }
+    .btn-save {
+      background: linear-gradient(90deg, #f45d01, #e93c4c);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: background 0.3s, box-shadow 0.3s;
+      border: none;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+    }
+    .btn-save:hover {
+      background: linear-gradient(90deg, #e93c4c, #f45d01);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.3);
+    }
+    @media (max-width: 768px) {
+      .container {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-4xl font-bold mb-4">Your QR Code</h1>
+    <div id="qr-code" class="qr-code custom-design"></div>
+    <p id="url-text" class="mt-4 text-xl"></p>
+    <p class="mt-2 text-lg">You can save the QR code by clicking the button below.</p>
+    <a id="save-link" class="btn-save" download="qrcode.png">Save Image</a>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    // Function to get query parameters
+    const getQueryParam = (param) => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    };
+
+    // Get URL and size from query parameters
+    const url = decodeURIComponent(getQueryParam('url'));
+    const size = getQueryParam('size') || 300;
+
+    // Generate QR code
+    const qrcode = new QRCode(document.getElementById("qr-code"), {
+      text: url,
+      width: size,
+      height: size,
+    });
+
+    // Display the URL
+    document.getElementById("url-text").textContent = `QR Code for: ${url}`;
+
+    // Create save button to download QR code as image
+    const saveBtn = document.getElementById("save-link");
+    saveBtn.href = document.querySelector(".qr-code canvas").toDataURL();
+  </script>
+</body>
+</html>
